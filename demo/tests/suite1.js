@@ -103,5 +103,20 @@ provide(function (exports) {
     });
   });
 
+  asyncTest('should force reload on all explicitly listed modules to gaurentee module reload of stubs', function () {
+    expect(1);
+    var stubs = {
+      'demo/modules/foo': function () { return 'bazz!'; }
+    };
+
+    // this forces a warm registry-cache
+    using('demo/modules/foo', 'demo/modules/usefoo', function (foo, usefoo) {
+      useWithStubs(['demo/modules/foo', 'demo/modules/usefoo'], stubs, function (fooStub, usefooStub) {
+        strictEqual(usefooStub(), 'foo() = bazz!', 'the usefoo module was reloaded even though we didnt stub it specifically');
+        start();
+      });
+    });
+  });
+
   exports();
 });

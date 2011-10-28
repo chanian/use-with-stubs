@@ -1,3 +1,4 @@
+// Some helper functions for mocking/stubbing with loadrunner
 (function () {
   // thanks angus
   var isType = function(type, obj) {
@@ -47,12 +48,16 @@
 
     // freeze/cache any using modules
     for(var i = 0; i < modules.length; i++) {
-      // store the old module
       var m = modules[i];
       if(hasModule(m)) {
+        // cache it
         cache[m] = loadrunner.Module.exports[m];
+
+        // and remove it for our upcoming sandboxed test block
+        removeModule(m);
       }
     }
+
     // stub out the appropriate modules
     for(var i in stubs) {
       if(stubs.hasOwnProperty(i)) {
