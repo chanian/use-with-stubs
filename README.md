@@ -5,7 +5,7 @@ A set of basic helper functions which provide clean/pollution free stubing for y
 Methods
 -------------------   
 
- - **useWithStubs**([Array] moduleList, [string] stubs, [function] testBlock)
+ - **useWithStubs**([Array] moduleList, [object] stubs, [function] testBlock)
  - **removeModule**([string|array] moduleName)
 
 Usage
