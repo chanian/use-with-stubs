@@ -41,6 +41,10 @@
   window.stubWith = function (modules, stubs, testBlock) {
     var cache = {};
 
+    if(isType('string', modules)) {
+      modules = [modules];
+    }
+
     // freeze/cache any using modules
     for(var i = 0; i < modules.length; i++) {
       // store the old module
