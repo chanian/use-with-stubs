@@ -80,10 +80,10 @@
         var m = modules[i];
         // unfreeze the existing module
         if(cache[m]) {
-          loadrunner.Module.exports[m] = cache[m];
+          setModule(m, cache[m]);
         } else {
         // remove the possibly polluted module from our test block
-          delete loadrunner.Module.exports[m];
+          removeModule(m)
         }
       }
     });
