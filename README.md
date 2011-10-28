@@ -5,14 +5,20 @@ A set of basic helper functions which provide clean/pollution free stubing for y
 Methods
 -------------------   
 
- - **useWithStubs**(moduleList, stubs, testBlock)
- - **removeModule**(moduleName)
+ - **useWithStubs**([Array] moduleList, [string] stubs, [function] testBlock)
+ - **removeModule**([string|array] moduleName)
+
+Usage
+-------------------
+Modules provided in the moduleList will be reloaded, with any provided stubs, and returned to their regular form after the test block has run.
+New modules that are used/introduced for the first time in the moduleList (were not previously in the registry) will be removed after the test block has run.
+The code inside the testBlock must be synchronous, the test environment is reverted immediately after execution of the testBlock.
 
 Sample Usage
 -------------------
 ```javascript
 
-    // assume we've loaded qunit
+    // assume we've loaded qunit + loadrunner
     
     // define some simple loadrunner modules
     provide('foo', function (exports) {
