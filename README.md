@@ -22,8 +22,8 @@ Sample Usage
     
     // define some simple loadrunner modules
     provide('foo', function (exports) {
-      exports({
-        value: 'bar'
+      exports(function () {
+        return 'bar';
       });
     });
 
@@ -40,11 +40,11 @@ Sample Usage
     asyncTest('should run a test with a foo stub', function () {
       expect(1);
       var stubs = {
-        'foo': { value: 'a stub!' }
+        'foo': function () { return 'a stub!'; }
       };
       // create a test block using and stub out foo
       useWithStubs('foo', stubs, function (foo) {
-        strictEqual(foo.value, 'a stub!', 'we use the foo stub!');
+        strictEqual(foo(), 'a stub!', 'we use the foo stub!');
         start();
       });
     });
@@ -53,7 +53,7 @@ Sample Usage
     asyncTest('should run a test using a module which uses a foo stub', function () {
       expect(1);
       var stubs = {
-        'foo': { value: 'a stub!' }
+        'foo': function () { return 'a stub!'; }
       };
       useWithStubs(['foo', 'usefoo'], stubs, function (foo, usefoo) {
         strictEqual(usefoo(), 'foo() = a stub!', 'we use the foo stub with the real usefoo!');
