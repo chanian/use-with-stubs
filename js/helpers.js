@@ -38,7 +38,7 @@
   }
 
   // Run a test block with a module stub, then replace it after
-  window.stubWith = function (modules, stubs, testBlock) {
+  window.useWithStubs = function (modules, stubs, testBlock) {
     var cache = {};
 
     if(isType('string', modules)) {
