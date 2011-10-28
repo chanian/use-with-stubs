@@ -88,24 +88,4 @@
       }
     });
   };
-
-  // A simple function that waits on a condition, then runs a callback
-  // condition can be a function or an eval'd string
-  window.waitFor = function (condition, cb, max) {
-    var timeout = 250;
-    var max = max || 6;
-    function foo () {
-      if(!--max) {
-        cb();
-        return;
-      }
-      if( (isType("string", condition) && eval(condition)) ||
-          (isType("function", condition) && condition())) {
-        cb();
-        return;
-      }
-      window.setTimeout(foo, timeout);
-    }
-    foo();
-  };
 })();
