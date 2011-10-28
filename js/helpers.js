@@ -4,19 +4,35 @@
     return (type == ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase());
   }
 
-  // Rip a loadrunner module directly out of the exports object
+  // a proxy for verifying the existence of a module in the registry
+  var hasModule = function(name) {
+    var moduleList = loadrunner.Module.exports;
+    return moduleList.hasOwnProperty(name) && !!moduleList[name];
+  }
+  // a proxy for directly sending a module in the module cache/registry
+  var setModule = function(name, module) {
+    loadrunner.Module.exports[name] = module;
+  }
+  // a proxy for getting a module directly from the module cache/registry
+  var getModule = function(name) {
+    if(hasModule(name)) {
+      return loadrunner.Module.exports[name];
+    } else {
+      return false;
+    }
+  }
+
+  // Rip a loadrunner module directly out of registry. Note, this won't remove existing
+  // references to an already loaded module possibly bound in a closure elsewhere
   window.removeModule = function(moduleName) {
     var moduleList = loadrunner.Module.exports;
-    if(isType('array', moduleName)) {
-      for(var i = 0; i < moduleName.length; i++) {
-        var m = moduleName[i];
-        if(moduleList.hasOwnProperty(m)) {
-          delete moduleList[m];
-        }
-      }
-    } else {
-      if(moduleList.hasOwnProperty(moduleName)) {
-        delete moduleList[moduleName];
+    if(isType('string', moduleName)) {
+      moduleName = [moduleName];
+    }
+    for(var i = 0; i < moduleName.length; i++) {
+      var m = moduleName[i];
+      if(hasModule(m)) {
+        delete moduleList[m];
       }
     }
   }
@@ -29,7 +45,7 @@
     for(var i = 0; i < modules.length; i++) {
       // store the old module
       var m = modules[i];
-      if(loadrunner.Module.exports.hasOwnProperty(m)) {
+      if(hasModule(m)) {
         cache[m] = loadrunner.Module.exports[m];
       }
     }
@@ -37,7 +53,7 @@
     for(var i in stubs) {
       if(stubs.hasOwnProperty(i)) {
         // we didn't already cache it
-        if(cache[i] && loadrunner.Module.exports.hasOwnProperty(m)) {
+        if(cache[i] && hasModule(m)) {
           cache[i] = loadrunner.Module.exports[i];
         }
         // and finally apply the stub
