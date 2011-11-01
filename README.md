@@ -5,7 +5,7 @@ A set of basic helper functions which provide clean/pollution free stubing for y
 Methods
 -------------------   
 
- - **useWithStubs**([Array] moduleList, [string] stubs, [function] testBlock)
+ - **useWithStubs**([Array] moduleList, [object] stubs, [function] testBlock)
  - **removeModule**([string|array] moduleName)
 
 Usage
@@ -42,7 +42,7 @@ Sample Usage
       var stubs = {
         'foo': function () { return 'a stub!'; }
       };
-      // create a test block using and stub out foo
+      // create a test block and stub out foo
       useWithStubs('foo', stubs, function (foo) {
         strictEqual(foo(), 'a stub!', 'we use the foo stub!');
         start();
@@ -55,7 +55,8 @@ Sample Usage
       var stubs = {
         'foo': function () { return 'a stub!'; }
       };
-      useWithStubs(['foo', 'usefoo'], stubs, function (foo, usefoo) {
+      // note: we don't need to explicitly use foo, even though usefoo will later
+      useWithStubs(['usefoo'], stubs, function (usefoo) {
         strictEqual(usefoo(), 'foo() = a stub!', 'we use the foo stub with the real usefoo!');
         start();
       });
