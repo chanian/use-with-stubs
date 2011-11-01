@@ -22,6 +22,10 @@
       return false;
     }
   }
+  // return a reference to the entire module registry
+  var getAllModules = function() {
+    return loadrunner.Module.exports;
+  }
 
   // Rip a loadrunner module directly out of registry. Note, this won't remove existing
   // references to an already loaded module possibly bound in a closure elsewhere
@@ -59,8 +63,11 @@
     }
 
     // stub out the appropriate modules
+    var stubsArray = [];
     for(var i in stubs) {
       if(stubs.hasOwnProperty(i)) {
+        stubsArray.push(i);
+
         // we didn't already cache it
         if(cache[i] && hasModule(m)) {
           cache[i] = loadrunner.Module.exports[i];
@@ -76,13 +83,13 @@
       testBlock.apply(null, [].slice.apply(arguments));
 
       // restore/unfreeze the modules
-      for(var i = 0; i < modules.length; i++) {
-        var m = modules[i];
+      var moduleList = getAllModules()
+      for(var m in moduleList) {
         // unfreeze the existing module
         if(cache[m]) {
           setModule(m, cache[m]);
         } else {
-        // remove the possibly polluted module from our test block
+          // remove the possibly polluted module from our test block
           removeModule(m)
         }
       }

@@ -81,7 +81,7 @@ provide(function (exports) {
     });
   });
 
-  asyncTest('should remove a stubbed module, if it wasnt previously loaded before the stub block', function () {
+  asyncTest('should remove any module that wasnt previously loaded before the stub block', function () {
     expect(3);
 
     // the world is as we expect it
@@ -97,8 +97,8 @@ provide(function (exports) {
         start();
       }, 1);
     }
-    useWithStubs(['modules/foo'], stubs, function(foo) {
-      strictEqual(foo(), 'bazz!', 'should use the foo stub');
+    useWithStubs(['modules/usefoo'], stubs, function(usefoo) {
+      strictEqual(usefoo(), 'foo() = bazz!', 'uses the real usefoo!');
       doLater();
     });
   });
